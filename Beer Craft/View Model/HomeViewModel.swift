@@ -19,6 +19,7 @@ class HomeViewModel {
     var uniqueLagerStrings = [String]()
     var reloadTable : (()->())?
     var reloadfilteredData: (()->())?
+    var showAlert : ((String,String)->())?
     var reloadSingleCell: ((Int)->())?
     var lagerBeerInfoList: [BeerInfo]?
     
@@ -148,11 +149,13 @@ extension HomeViewModel {
                         self.dispatchGroup.leave()
                     }
                     catch (let error) {
+                        self.showAlert?("Oops", error.localizedDescription)
                         print(error.localizedDescription)
                         self.dispatchGroup.leave()
                     }
                 }
             case .failure(let error):
+                self.showAlert?("Oops", error.localizedDescription)
                 print(error.localizedDescription)
                 self.dispatchGroup.leave()
             }

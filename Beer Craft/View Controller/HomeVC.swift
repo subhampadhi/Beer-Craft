@@ -13,6 +13,7 @@ class HomeVC: HomeView {
     
     let viewModel: HomeViewModel
     
+    
     override func viewDidLoad() {
         mainTable.dataSource = self
         mainTable.delegate = self
@@ -63,10 +64,16 @@ extension HomeVC {
             if strongSelf.searchController.isActive && strongSelf.searchController.searchBar.text != "" {
                 strongSelf.viewModel.assignFilteredTableCells()
                 strongSelf.mainTable.reloadData()
+                
             }else {
                 strongSelf.viewModel.assignTableViewCells()
                 strongSelf.mainTable.reloadData()
+                strongSelf.refreshControl.endRefreshing()
             }
+        }
+        viewModel.showAlert = {  [weak self] (title,message) in
+            guard let strongSelf = self else {return}
+            Utils.showAlert(title: title, message: message, presenter: strongSelf)
         }
         
         viewModel.reloadSingleCell = { [weak self] index in
@@ -108,6 +115,15 @@ extension HomeVC {
         actionSheet.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
         self.present(actionSheet, animated: true, completion: nil)
     }
+    
+    @objc func refresh() {
+        
+        self.viewModel.callApi()
+    
+        
+        
+        
+    }
 }
 
 extension HomeVC: UITableViewDelegate {
@@ -136,5 +152,4 @@ extension HomeVC: UITableViewDataSource {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return UITableView.automaticDimension
     }
-
 }

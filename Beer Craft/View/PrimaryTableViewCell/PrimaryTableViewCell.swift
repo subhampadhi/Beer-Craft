@@ -24,7 +24,7 @@ class PrimaryTableViewCell: UITableViewCell {
         
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
+        view.backgroundColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
         view.layer.shadowOffset = CGSize(width: 0, height: 3)
         view.layer.shadowOpacity = 0.3
         view.layer.cornerRadius = 3.0

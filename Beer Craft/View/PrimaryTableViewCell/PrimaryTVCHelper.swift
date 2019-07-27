@@ -41,6 +41,7 @@ extension PrimaryTVCHelper: CellFunctions {
         cell.percentLabel.text = percentLabelText
         cell.leadingImage.image = #imageLiteral(resourceName: "beer_Image")
         cell.selectionStyle = .none
+        cell.backgroundColor = #colorLiteral(red: 0.9607843137, green: 0.9607843137, blue: 0.9607843137, alpha: 1)
         if self.orderCount > 0 {
             cell.orderCountLabel.text = "\(orderCount)"
             cell.orderCountLabel.textColor = #colorLiteral(red: 0.3411764801, green: 0.6235294342, blue: 0.1686274558, alpha: 1)
