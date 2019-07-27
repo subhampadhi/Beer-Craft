@@ -8,6 +8,7 @@
 
 import Foundation
 import Moya
+
 class HomeViewModel {
     
     private let provider = MoyaProvider<BeerApi>()
