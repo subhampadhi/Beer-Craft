@@ -16,9 +16,12 @@ class PrimaryTVCHelper {
     let topLabelText: String
     let bottomLabelText: String
     let percentLabelText:String
+    var plusTapped: ((Int)->())?
+    var miunsTapped: ((Int)->())?
+    var orderCount: Int = 0
     
     init(leadingImage: UIImage, topLabelText: String, bottomLabelText: String, percentLabelText: String) {
-        
+    
         self.leadingImage = leadingImage
         self.topLabelText = topLabelText
         self.bottomLabelText = bottomLabelText
@@ -38,6 +41,19 @@ extension PrimaryTVCHelper: CellFunctions {
         cell.percentLabel.text = percentLabelText
         cell.leadingImage.image = #imageLiteral(resourceName: "beer_Image")
         cell.selectionStyle = .none
+        if self.orderCount > 0 {
+            cell.orderCountLabel.text = "\(orderCount)"
+            cell.orderCountLabel.textColor = #colorLiteral(red: 0.3411764801, green: 0.6235294342, blue: 0.1686274558, alpha: 1)
+        } else {
+            self.orderCount = 0
+            cell.orderCountLabel.text = ""
+        }
+        cell.plusTappedClosure = { () in
+            self.plusTapped?(indexPath.row)
+        }
+        cell.minusTappedClosure = { () in
+            self.miunsTapped?(indexPath.row)
+        }
         return cell
     }
     

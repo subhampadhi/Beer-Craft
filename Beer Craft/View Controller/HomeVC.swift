@@ -13,7 +13,6 @@ class HomeVC: HomeView {
     
     let viewModel: HomeViewModel
     
-    
     override func viewDidLoad() {
         mainTable.dataSource = self
         mainTable.delegate = self
@@ -65,10 +64,49 @@ extension HomeVC {
                 strongSelf.viewModel.assignFilteredTableCells()
                 strongSelf.mainTable.reloadData()
             }else {
-            strongSelf.viewModel.assignTableViewCells()
+                strongSelf.viewModel.assignTableViewCells()
                 strongSelf.mainTable.reloadData()
             }
         }
+        
+        viewModel.reloadSingleCell = { [weak self] index in
+            guard let strongSelf = self else {return}
+            let indexPath = IndexPath(item: index, section: 0)
+            strongSelf.mainTable.reloadRows(at: [indexPath], with: .none)
+        }
+        
+        viewModel.reloadfilteredData = { [weak self] in
+            guard let strongSelf = self else {return}
+            strongSelf.viewModel.assignLagerFilteredTableCells()
+            strongSelf.mainTable.reloadData()
+        }
+    }
+    
+    @objc func sortByButtonTapped() {
+        let actionSheet = UIAlertController(title: "Sort By", message: "Select the way you want to sort by", preferredStyle: .actionSheet)
+        actionSheet.addAction(UIAlertAction(title: "Alcohol Content: Low - High", style: .default, handler: { (action: UIAlertAction) in
+           self.viewModel.sortByAlcoholContel(isLowToHigh: true)
+        }))
+        actionSheet.addAction(UIAlertAction(title: "Alcohol Content: High - High", style: .default, handler: { (action: UIAlertAction) in
+            self.viewModel.sortByAlcoholContel(isLowToHigh: false)
+        }))
+        actionSheet.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        self.present(actionSheet, animated: true, completion: nil)
+    }
+    
+    @objc func filterByButtonTapped() {
+        let actionSheet = UIAlertController(title: "Filter By", message: "Select the lager you want to search for", preferredStyle: .actionSheet)
+        for lagers in self.viewModel.uniqueLagerStrings {
+            actionSheet.addAction(UIAlertAction(title: "\(lagers)", style: .default, handler: { (action: UIAlertAction) in
+                guard let title = action.title else {return}
+                self.viewModel.filterByUniqueLager(lager: title)
+            }))
+        }
+        actionSheet.addAction(UIAlertAction(title: "Remove Filter", style: .destructive, handler: { (action: UIAlertAction) in
+            self.viewModel.reloadTable?()
+        }))
+        actionSheet.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        self.present(actionSheet, animated: true, completion: nil)
     }
 }
 
